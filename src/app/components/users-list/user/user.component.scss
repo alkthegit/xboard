@@ -59,14 +59,25 @@
         padding-left: 0px;
         padding-top: 0px;
       }
+
+      &.button-delete-user-display-list{
+        right: 2px;
+        top: 2px;
+        width: 1.2rem;
+        height: 1.2rem;
+        font-size: 1.2rem
+      }
     }
   }
 
   &.user-selected .user-card {
     box-shadow: 0px 0px 5px 4px #007ad8;
     transform: scale(0.95);
-
     transition: all 0.15s;
+    
+    &.display-list{
+      transform: scale(0.98);      
+    }
   }
 }
 
@@ -168,6 +179,48 @@
         font-style: italic;
       }
     }
+  }
+
+  &.display-list {
+    width: 100%;
+    max-width: initial;
+    
+    height: 85px;
+
+    padding: 5px 10px;
+    background-color: #fcfcff;
+    box-shadow: 0px 0px 3px 1px rgb(62, 54, 54);
+    border-radius: 3px;    
+
+    .user-status {
+      position: absolute;
+      left: 2.5rem;
+      width: 7px;
+      height: 7px;
+      border-width: 1px;
+    }
+
+    .user-image{
+      background-position: left center;
+    }
+
+    .user-info {
+      .user-location {
+        .user-location-flag {
+          right: 0px;
+          bottom: 0px;
+        }
+
+        .user-location-location{
+          max-width: initial;
+          right: 2.5rem;
+          bottom: 0;
+          text-align: right;
+          font-style: normal;
+        }
+      }
+    }
+
   }
 }
 

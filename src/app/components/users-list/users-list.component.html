@@ -60,7 +60,7 @@
                 [innerText]="legendRef.dataset.expanded==='true'? '▼': '►'"></span>
             </legend>
             <div class="population-xfactor">
-              <label for="xFactorRange">х-Фактор</label>
+              <label for="xFactorRange">X-фактор</label>
               <input type="range"
                 id="xFactorRange"
                 list="xFactorRangeDataList"
@@ -126,13 +126,42 @@
     </span>
   </section>
 
-  <section class="users-list"
+  <section *ngIf="listMode==='card'"
+    class="users-list"
     [class.list-mode-card]="listMode==='card'">
     <ng-container *ngIf="(users$ | async) as users; else emptyListRef">
       <article class="user-card-section"
         [class.user-pending-delete]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
         *ngFor="let user of users">
         <app-user [user]="user"
+          [displayMode]="listMode"
+          [disabled]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+          (click)="onUserClick(user)"
+          (deleteMe)="onDeleteUser(user)"></app-user>
+      </article>
+    </ng-container>
+
+    <ng-template #emptyListRef>
+      <p *ngIf="!firstUpdate; else firstUpdateRef"
+        class="empty-list">Список пуст</p>
+
+      <ng-template #firstUpdateRef>
+        <div class="first-update">
+          <p>Пользователи</p>
+        </div>
+      </ng-template>
+    </ng-template>
+  </section>
+
+  <section *ngIf="listMode==='list'"
+    class="users-list"
+    [class.list-mode-list]="listMode==='list'">
+    <ng-container *ngIf="(users$ | async) as users; else emptyListRef">
+      <article class="user-card-section user-card-section-list"
+        [class.user-pending-delete]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+        *ngFor="let user of users">
+        <app-user [user]="user"
+          [displayMode]="listMode"
           [disabled]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
           (click)="onUserClick(user)"
           (deleteMe)="onDeleteUser(user)"></app-user>

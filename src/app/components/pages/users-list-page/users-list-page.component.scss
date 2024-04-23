@@ -1,3 +1,12 @@
+@import '../../../styles//variables';
+
 .app-users-list-page-component {
   padding: 15px 10px;
+}
+
+@media (min-width:$lg) {
+  .app-users-list-page-component {
+    width: 70%;
+    margin: auto;
+  }
 }
