@@ -36,12 +36,19 @@ export function populateDb(
  */
 function produceEntity(xFactor: number = 5): UserRecord {
   // есть вероятность, что ты не землянин
-
   let x = Math.random() * 100 < xFactor;
-  const xNum = x ? `#${getRandomNumberString(3, 5)}` : '';
-  const gender = x ? 2 : getRandomItem([0, 1]);
-  const genderName = gender === 0 ? 'male' : gender === 1 ? 'female' : gender === 2 ? 'x' : 'male';
-  const region = x ? LocationsData.find(e => e.code === 'milkyway') : getRandomItem(LocationsData);
+
+  const xNum = x ?
+    `#${getRandomNumberString(3, 5)}` : '';
+  const gender = x ?
+    2 : getRandomItem([0, 1]);
+  const genderName = gender === 0 ?
+    'male' : gender === 1 ?
+      'female' : gender === 2 ?
+        'x' : 'male';
+  const region = x ?
+    LocationsData.find(e => e.code === 'milkyway') :
+    getRandomItem(LocationsData.filter(l => l.code !== 'milkyway'));
   const location = getRandomItem(region?.cities ?? []);
 
   let user: UserRecord = {

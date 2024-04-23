@@ -222,10 +222,10 @@
 
         .population-xfactor {
           position: relative;
-            width: 20rem;
-            padding-left: 15px;
-            padding-bottom: 1.5rem;
-            margin-bottom: 15px;
+          width: 20rem;
+          padding-left: 15px;
+          padding-bottom: 1.5rem;
+          margin-bottom: 15px;
 
           label {
             display: block;
@@ -309,6 +309,7 @@
   min-height: 2rem;
 
   .first-update {
+    text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
     color: #5b8aad;
@@ -345,13 +346,14 @@
     }
   }
 }
+
 article.user-pending-delete {
   opacity: 0.4;
   transform: scale(0.4);
   transition: all 2000ms;
   transition-timing-function: cubic-bezier(0.085, 0.240, 0.225, 0.970);
 
-  &.user-card-section-list{
+  &.user-card-section-list {
     transform: rotateY(90deg);
     transition: all 2000ms;
     transition-timing-function: cubic-bezier(0.085, 0.240, 0.225, 0.970);
@@ -403,6 +405,7 @@ article.user-pending-delete {
     }
   }
 }
+
 @media (max-width:$sm) {
   .toolbar {
     display: flex;
@@ -415,9 +418,10 @@ article.user-pending-delete {
       font-size: 1rem;
       font-weight: bold;
     }
-.population-xfactor {
-  width: 12rem !important;
-}
+
+    .population-xfactor {
+      width: 12rem !important;
+    }
   }
 
   .toolbar-controls {

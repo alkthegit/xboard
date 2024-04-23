@@ -54,8 +54,9 @@
             [class.collapsed]="legendRef.dataset.expanded!=='true'"
             [disabled]="pendingRepopulate">
             <legend #legendRef
+              [attr.data-expanded]="settings.populizerExpanded"
               tabindex="1"
-              (click)="legendRef.dataset.expanded=legendRef.dataset.expanded==='true'? 'false': 'true'"> Популяция
+              (click)="legendRef.dataset.expanded=legendRef.dataset.expanded==='true'? 'false': 'true'; onLegendClick(legendRef.dataset.expanded=legendRef.dataset.expanded==='true')"> Настройки популяции
               <span class="expand-button"
                 [innerText]="legendRef.dataset.expanded==='true'? '▼': '►'"></span>
             </legend>
@@ -154,7 +155,8 @@
         class="label-autoupdate">
         <input id="autoupdate"
           type="checkbox"
-          [(ngModel)]="autoUpdate">&nbsp;Автообновление
+          [value]="autoUpdate"
+          (change)="onAutoUpdateChanges(autoupdateRef.checked)" #autoupdateRef>&nbsp;Автообновление
       </label>
     </div>
 

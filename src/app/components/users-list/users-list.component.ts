@@ -84,6 +84,19 @@ export class UsersListComponent implements OnInit, OnDestroy {
    */
   public selectedUsers: User[] = [];
 
+  /**
+   * Текущие настройки просмотра (сохраняются в хранилище)
+   */
+  public settings: {
+    autoUpdate: boolean;
+    populizerExpanded: boolean,
+    listMode: 'card' | 'list'
+  } = {
+      autoUpdate: true,
+      populizerExpanded: false,
+      listMode: 'card'
+    }
+
   private destroy$ = new Subject<void>();
   private usersListRequest: UserListRequest = undefined;
   private users: User[] = [];
@@ -108,7 +121,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
     private usersApiService: UserApiService,
     private userEnvService: UserEnvService,
     private server: ServerService,
-  ) { }
+  ) {
+    this.loadSettingFromStorage();
+
+    this.listMode = this.settings.listMode;
+    this.autoUpdate = this.settings.autoUpdate;
+  }
 
   ngOnInit(): void {
     this.subscribeToUsersListUpdateSignals();
@@ -121,6 +139,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   public onChangListMode(mode: 'card' | 'list'): void {
     this.listMode = mode;
+
+    this.saveValueToLocalStorage('listMode', mode);
   }
 
   public onUserClick(user: User): void {
@@ -210,6 +230,18 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.userEnvService.populationVolumeMin = min;
     this.userEnvService.populationVolumeMax = max;
+  }
+
+  /**
+   * Переключение группы для формы
+   */
+  public onLegendClick(value: boolean): void {
+    this.saveValueToLocalStorage('populizerExpanded', value);
+  }
+
+  public onAutoUpdateChanges(value: boolean): void {
+    this.autoUpdate = value;
+    this.saveValueToLocalStorage('autoUpdate', value);
   }
 
   /**
@@ -350,5 +382,31 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.selectedUsers.length = 0;
     this.users.length = 0;
     this.usersSubject.next([]);
+  }
+
+  /**
+   * Загружает настройки просмотра из хранилища
+   */
+  private loadSettingFromStorage(): void {
+    let storageValue: string;
+    if (localStorage) {
+      storageValue = localStorage.getItem('autoUpdate');
+      this.settings.autoUpdate = storageValue === 'true';
+
+      storageValue = localStorage.getItem('listMode');
+      this.settings.listMode = storageValue === 'card' || storageValue === 'list' ? storageValue : 'card';
+
+      storageValue = localStorage.getItem('populizerExpanded');
+      this.settings.populizerExpanded = storageValue === 'true';
+    }
+  }
+
+  /**
+   * Сохраняет значение в хранилище
+   */
+  private saveValueToLocalStorage(name: string, value: any): void {
+    if (localStorage) {
+      localStorage.setItem(name ?? '???', value)
+    }
   }
 }
