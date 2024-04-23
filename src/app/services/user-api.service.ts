@@ -15,15 +15,15 @@ export class UserApiService {
 
   /**
    * Получает список пользователей по указанному запросу поиска
-   * @param userListRequest 
+   * @param userListRequest
    */
-  public getList(userListRequest?: UserListRequest): Observable<User[]> {
+  public getList(userListRequest?: UserListRequest | null): Observable<User[]> {
     return this.server.getList(userListRequest);
   }
 
   /**
    * Возвращает пользователя с указанным id
-   * @param id 
+   * @param id
    */
   public getById(id: User['id']): Observable<User> {
     return this.server.getById(id);
@@ -31,7 +31,7 @@ export class UserApiService {
 
   /**
    * Удаляет пользователя по указанному id
-   * @param id 
+   * @param id
    */
   public remove(id: User['id']): Observable<void> {
     return this.server.remove(id);

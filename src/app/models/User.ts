@@ -12,6 +12,11 @@ export interface User {
     gender: 'male' | 'female' | 'x';
     location: Location | undefined;
     imageUrl: string;
+
+    /**
+     * Фронтовые расширения
+     */
+    selected?: boolean;
 }
 
 /**

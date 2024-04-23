@@ -3,9 +3,12 @@ import { UserRecord } from '../models/UserRecord';
 import { populateDb } from '../helpers/populizer';
 import { User } from 'src/app/models/User';
 import { Observable, of, throwError } from 'rxjs';
+import { concatMap, delay, tap } from 'rxjs/operators';
 import { UserListRequest } from '../models/UserLIstRequest';
 import { mapUserRecordToUser } from '../helpers/mappers';
 import { normalizePageable } from '../helpers/pager-helper';
+import { UserEnvService } from 'src/app/services/user-env.service';
+import { userDataSize } from '../config/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +16,15 @@ import { normalizePageable } from '../helpers/pager-helper';
 export class ServerService {
   private data: UserRecord[] = [];
 
-  constructor() {
-    this.data = populateDb();
+  constructor(
+    private userEnvSercvice: UserEnvService,
+  ) {
+    this.generateData();
   }
 
   /**
    * Отдает список пользователей с учетом строки поиска и настройки пагинации
-   * @param userListRequest 
+   * @param userListRequest
    */
   public getList(userListRequest?: UserListRequest): Observable<User[]> {
     let records: ServerService['data'] = [...this.data];
@@ -34,7 +39,7 @@ export class ServerService {
          *  1) "токенизируем" по пробельным символам
          *  2) для каждого токена ищем по подстроке в пользовательских полях ФИО
          */
-        if (search != null && search !== '') {
+        if (search != null && search !== '' && search !== '*') {
           tokens = search.split(/\s/ig,)
             .map(e => e.trim().toLowerCase());
 
@@ -70,15 +75,25 @@ export class ServerService {
       }
     }
 
+    const users: User[] = records
+      .map(record => mapUserRecordToUser(record));
+
+    /**
+     * Рассчитываем задержку - пропорционально сетевым возможностям и объему данных
+     */
+    const dataSize = users.length * userDataSize;
+    const speed = this.userEnvSercvice.networkSpeedThrottled;
+    const delayMs = (dataSize / speed) * 1000;
+
     // отдаем на фронт в приобразованном виде
-    return of(records
-      .map(record => mapUserRecordToUser(record))
+    return (of(users)
+      .pipe(delay(delayMs))
     );
   }
 
   /**
    * Отдает пользователя с указанным id
-   * @param id 
+   * @param id
    */
   public getById(id: User['id']): Observable<User> {
     return throwError(new Error('удаление не реализовано'));
@@ -86,11 +101,62 @@ export class ServerService {
 
   /**
    * Удаляет пользователя по указанному id
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
   public remove(id: User['id']): Observable<void> {
-    return throwError(new Error('удаление не реализовано'));
+    // имитация серверной задержки
+    const delayMs = 400 + Math.random() * 1401;
+    return (
+      of(void 0)
+        .pipe(
+          delay(delayMs),
+          tap(() => {
+            const userIndex = this.data.findIndex(r => r.id === id);
+            if (userIndex !== -1) {
+              window?.clearInterval(this.data[userIndex]?.beatInterval ?? 0);
+              this.data.splice(userIndex, 1);
+            }
+          })
+        )
+    );
   }
 
+  /**
+   * Создает популяцию заново
+   */
+  public repopulate(): Observable<void> {
+    // случайная задержка на работу сервера
+    const delayMs = 600 + Math.random() * 1701;
+
+    const populate$ = of(void 0)
+      .pipe(
+        delay(delayMs),
+        concatMap(() => {
+          // останаливаем пульс...
+          if (this.data?.length > 0) {
+            for (const record of this.data) {
+              window?.clearInterval(record?.beatInterval ?? 0);
+            }
+          }
+
+          this.generateData();
+
+          return of(void 0);
+        })
+      );
+
+    return populate$;
+  }
+
+  /**
+   * Создание данных
+   */
+  private generateData(): void {
+    this.data = populateDb(
+      this.userEnvSercvice.populationVolumeMin,
+      this.userEnvSercvice.populationVolumeMax,
+      this.userEnvSercvice.xFactor
+    );
+  }
 }

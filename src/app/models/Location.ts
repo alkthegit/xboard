@@ -9,7 +9,11 @@ export interface Location {
     /**
      * Наименование месторасположения - город и т.д.
      */
-    location: string;
+    name: string;
+    /**
+     * Иконка флага
+     */
+    flag: string;
 }
 
 /**

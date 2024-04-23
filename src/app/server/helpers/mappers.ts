@@ -12,7 +12,7 @@ export function mapUserRecordToUser(record: UserRecord): User {
     }
 
     const location = LocationsData.find(e => e?.code === record.region_code);
-    const faceUrlPrefix = '/assets/svg/face';
+  const assetsUrl = '/assets/svg';
 
     let user: User = {
         id: record.id,
@@ -29,11 +29,12 @@ export function mapUserRecordToUser(record: UserRecord): User {
                 code: location.code,
                 name: location.name
             },
-            location: record.location_name
+          name: record.location_name,
+          flag: `${assetsUrl}/flag/${location.code}.svg`
         } : undefined,
-        imageUrl: record?.gender === 2 ? `${faceUrlPrefix}/x.svg` :
-            record?.gender === 0 ? `${faceUrlPrefix}/m/f-m-${record.user_image}.svg` :
-                `${faceUrlPrefix}/fem/f-fm-${record.user_image}.svg`
+      imageUrl: record?.gender === 2 ? `${assetsUrl}/face/x.svg` :
+        record?.gender === 0 ? `${assetsUrl}/face/m/f-m-${record.user_image}.svg` :
+          `${assetsUrl}/face/fem/f-fm-${record.user_image}.svg`
 
     };
 

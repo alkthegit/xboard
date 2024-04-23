@@ -1,0 +1,159 @@
+<div class="app-users-list-component">
+  <section class="toolbar">
+    <div class="toolbar-controls">
+      <ul class="toolbar-buttons">
+        <li class="toolbar-button toolbar-button-grid"
+          [class.toolbar-button-mode-active]="listMode==='card'"
+          tabindex="1"
+          (click)="onChangListMode('card')">
+          <div class="toolbar-button-grid-row">
+            <div class="toolbar-button-grid-row-box"></div>
+            <div class="toolbar-button-grid-row-box"></div>
+            <div class="toolbar-button-grid-row-box"></div>
+            <div class="toolbar-button-grid-row-box"></div>
+          </div>
+        </li>
+        <li class="toolbar-button toolbar-button-list"
+          [class.toolbar-button-mode-active]="listMode==='list'"
+          tabindex="1"
+          (click)="onChangListMode('list')">
+          <div class="toolbar-button-list-row">
+            <div class="toolbar-button-list-row-box"></div>
+            <span class="toolbar-button-list-row-line"></span>
+          </div>
+          <div class="toolbar-button-list-row">
+            <div class="toolbar-button-list-row-box"></div>
+            <span class="toolbar-button-list-row-line"></span>
+          </div>
+          <div class="toolbar-button-list-row">
+            <div class="toolbar-button-list-row-box"></div>
+            <span class="toolbar-button-list-row-line"></span>
+          </div>
+        </li>
+
+        <li *ngIf="selectedUsers.length>0"
+          class="toolbar-button toolbar-button-delete">
+          <button class="toolbar-button-delete-button"
+            [disabled]="this.pendingUsers"
+            title="Удалить выбранных пользователей"
+            (click)="onDeleteSelectedUsers()">Удалить</button>
+        </li>
+
+        <li class="toolbar-button toolbar-button-refresh">
+          <button class="toolbar-button-refresh-button"
+            [disabled]="this.pendingUsers"
+            title="Обновить список"
+            (click)="onRefreshList()"></button>
+        </li>
+      </ul>
+
+      <div class="toolbar-controls-population">
+        <form class="population"
+          [class.collapsed]="legendRef.dataset.expanded!=='true'">
+          <fieldset class="fieldset-common"
+            [class.collapsed]="legendRef.dataset.expanded!=='true'"
+            [disabled]="pendingRepopulate">
+            <legend #legendRef
+              tabindex="1"
+              (click)="legendRef.dataset.expanded=legendRef.dataset.expanded==='true'? 'false': 'true'"> Популяция
+              <span class="expand-button"
+                [innerText]="legendRef.dataset.expanded==='true'? '▼': '►'"></span>
+            </legend>
+            <div class="population-xfactor">
+              <label for="xFactorRange">х-Фактор</label>
+              <input type="range"
+                id="xFactorRange"
+                list="xFactorRangeDataList"
+                [min]="xFactorRange[0]"
+                [max]="xFactorRange[xFactorRange.length-1]"
+                step="5"
+                [value]="xFactor"
+                (change)="onXFactorChange(xFactorInputRef.value)"
+                #xFactorInputRef>
+            </div>
+            <fieldset class="fieldset-population-volumes">
+              <legend tabindex="1"> Население </legend>
+              <div class="population-volumes-controls">
+                <label for="popuationMinRange">Не менее</label>
+                <input type="range"
+                  id="popuationMinRange"
+                  min="10"
+                  max="50"
+                  step="1"
+                  [value]="populationVolumeMin"
+                  (change)="onPopulationVolumesChange(popuationMinRangeRef.value, popuationMaxRangeRef.value)"
+                  #popuationMinRangeRef>
+                <input type="text"
+                  [value]="popuationMinRangeRef.value"
+                  disabled>
+                <label for="popuationMaxRange">Не более</label>
+                <input type="range"
+                  id="popuationMaxRange"
+                  [min]="popuationMinRangeRef.value"
+                  max="100"
+                  step="1"
+                  [value]="populationVolumeMax"
+                  (change)="onPopulationVolumesChange(popuationMinRangeRef.value, popuationMaxRangeRef.value)"
+                  #popuationMaxRangeRef>
+                <input type="text"
+                  [value]="popuationMaxRangeRef.value"
+                  disabled>
+              </div>
+            </fieldset>
+          </fieldset>
+          <button class="population-gen"
+            type="submit"
+            [disabled]="pendingRepopulate || pendingUsers || pendingUserDelete || pendingUserDeleteId"
+            (click)="onRepopulate()">Начать заново!</button>
+        </form>
+      </div>
+
+      <label for="autoupdate"
+        class="label-autoupdate">
+        <input id="autoupdate"
+          type="checkbox"
+          [(ngModel)]="autoUpdate">&nbsp;Автообновление
+      </label>
+    </div>
+
+    <span class="list-message-panel">
+      <span *ngIf="pendingUsers"
+        class="list-message-update">Обновление...</span>
+      <span *ngIf="pendingUsersDelete || pendingUserDelete"
+        class="list-message-delete">Удаление...</span>
+      <span *ngIf="pendingRepopulate"
+        class="list-message-delete">Пересоздание...</span>
+    </span>
+  </section>
+
+  <section class="users-list"
+    [class.list-mode-card]="listMode==='card'">
+    <ng-container *ngIf="(users$ | async) as users; else emptyListRef">
+      <article class="user-card-section"
+        [class.user-pending-delete]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+        *ngFor="let user of users">
+        <app-user [user]="user"
+          [disabled]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+          (click)="onUserClick(user)"
+          (deleteMe)="onDeleteUser(user)"></app-user>
+      </article>
+    </ng-container>
+
+    <ng-template #emptyListRef>
+      <p *ngIf="!firstUpdate; else firstUpdateRef"
+        class="empty-list">Список пуст</p>
+
+      <ng-template #firstUpdateRef>
+        <div class="first-update">
+          <p>Пользователи</p>
+        </div>
+      </ng-template>
+    </ng-template>
+  </section>
+
+</div>
+
+<datalist id="xFactorRangeDataList">
+  <option *ngFor="let value of xFactorRange"
+    [value]="value"></option>
+</datalist>

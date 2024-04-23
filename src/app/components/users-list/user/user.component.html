@@ -1,0 +1,44 @@
+<div class="app-user-component"
+  [class.user-selected]="user.selected">
+  <ng-container *ngIf="displayMode=='card' else displayLineRef">
+    <div class="user-card">
+      <div class="user-image"
+        [style.background-image]="'url('+user.imageUrl+')'">
+        <div class="user-status"
+          [ngClass]="{
+          'user-status-online': user.status === UserStatus.Online,
+          'user-status-offline':user.status   === UserStatus.Offline,
+          'user-status-recent': user.status  === UserStatus.Recent
+        }"></div>
+      </div>
+
+      <div class="user-info">
+        <p class="user-name">{{user | userShortName}}</p>
+        <div class="user-location">
+          <span class="user-location-location">
+            <span>{{user.location?.name}},</span>
+            <span>{{user.location?.region?.name}}</span>
+          </span>
+          <div class="user-location-flag"
+            [style.background-image]="'url('+user?.location?.flag+')'">
+          </div>
+        </div>
+      </div>
+
+      <div class="user-overlay"
+        title="{{user | userFio}}"
+        (click)="onUserClick($event)">
+        <button class="button-delete-user"
+          [class.disabled]="user.selected"
+          (click)="onDeleteUser(user, $event)"
+          [disabled]="user.selected || disabled">×</button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #displayLineRef>
+  </ng-template>
+
+
+
+</div>
