@@ -9,6 +9,7 @@ import { UsersListPageComponent } from './components/pages/users-list-page/users
 import { UsersListComponent } from './components/users-list/users-list.component';
 import { FormsModule } from '@angular/forms';
 import { UserFioPipe } from './pipes/user-fio.pipe';
+import { RangePointOpacityPipe } from './pipes/range-point-opacity.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { UserFioPipe } from './pipes/user-fio.pipe';
     UserShortNamePipe,
     UserFioPipe,
     UsersListComponent,
-    UsersListPageComponent
+    UsersListPageComponent,
+    RangePointOpacityPipe
   ],
   imports: [
     BrowserModule,

@@ -21,7 +21,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   public pendingUsers = false;
   public pendingUserDelete = false;
-  public pendingUserDeleteId: User['id'];
+  public pendingUserDeleteIdSet = new Set<User['id']>();
   public pendingUsersDelete = false;
   public pendingRepopulate = false;
 
@@ -163,7 +163,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /**
    * Изменение значения x-фкатора
    */
-  public onXFactorChange(value: number): void {
+  public onXFactorChange(xFactorVal: string): void {
+    let value = Number.parseInt(xFactorVal, 10);
+    if (Number.isNaN(value)) {
+      value = this.userEnvService.xFactorRange[0];
+    }
+
     this.userEnvService.xFactor = value;
   }
 
@@ -248,8 +253,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param syncList если `true`, то автоматически синхронизирует текущий список в UI
    */
   private deleteUser(user: User, syncList: boolean = true): Observable<void> {
+    const pendingId = user.id
     this.pendingUserDelete = true;
-    this.pendingUserDeleteId = user.id
+    this.pendingUserDeleteIdSet.add(pendingId);
     const delete$ = this.usersApiService.remove(user.id)
       .pipe(
         catchError(err => {
@@ -267,7 +273,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
         }),
         finalize(() => {
           this.pendingUserDelete = false;
-          this.pendingUserDeleteId = undefined;
+          this.pendingUserDeleteIdSet.delete(pendingId);
         })
       );
     return delete$;

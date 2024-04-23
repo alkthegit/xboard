@@ -70,6 +70,48 @@
                 [value]="xFactor"
                 (change)="onXFactorChange(xFactorInputRef.value)"
                 #xFactorInputRef>
+                  <span class="span-heads span-heads-h">
+                    <span class="span-head span-head-h"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="15 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="25 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="35 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="45 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="55 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="65 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="75 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="85 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-h"
+                      [style.opacity]="95 | rangePointOpacity: xFactor: 10"></span>
+                  </span>
+                  <span class="span-heads span-heads-x">
+                    <span class="span-head span-head-x"
+                      [style.opacity]="5 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="15 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="25 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="35 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="45 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="55 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="65 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="75 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"
+                      [style.opacity]="85 | rangePointOpacity: xFactor: 10"></span>
+                    <span class="span-head span-head-x"></span>
+                  </span>
             </div>
             <fieldset class="fieldset-population-volumes">
               <legend tabindex="1"> Население </legend>
@@ -103,7 +145,7 @@
           </fieldset>
           <button class="population-gen"
             type="submit"
-            [disabled]="pendingRepopulate || pendingUsers || pendingUserDelete || pendingUserDeleteId"
+            [disabled]="pendingRepopulate || pendingUsers || pendingUserDelete"
             (click)="onRepopulate()">Начать заново!</button>
         </form>
       </div>
@@ -131,11 +173,11 @@
     [class.list-mode-card]="listMode==='card'">
     <ng-container *ngIf="(users$ | async) as users; else emptyListRef">
       <article class="user-card-section"
-        [class.user-pending-delete]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+        [class.user-pending-delete]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected)"
         *ngFor="let user of users">
         <app-user [user]="user"
           [displayMode]="listMode"
-          [disabled]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+          [disabled]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected)"
           (click)="onUserClick(user)"
           (deleteMe)="onDeleteUser(user)"></app-user>
       </article>
@@ -158,11 +200,11 @@
     [class.list-mode-list]="listMode==='list'">
     <ng-container *ngIf="(users$ | async) as users; else emptyListRef">
       <article class="user-card-section user-card-section-list"
-        [class.user-pending-delete]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+        [class.user-pending-delete]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected)"
         *ngFor="let user of users">
         <app-user [user]="user"
           [displayMode]="listMode"
-          [disabled]="pendingUserDeleteId===user.id || (pendingUsersDelete && user.selected)"
+          [disabled]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected)"
           (click)="onUserClick(user)"
           (deleteMe)="onDeleteUser(user)"></app-user>
       </article>

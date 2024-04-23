@@ -221,7 +221,11 @@
         }
 
         .population-xfactor {
-          padding-left: 5px;
+          position: relative;
+            width: 20rem;
+            padding-left: 15px;
+            padding-bottom: 1.5rem;
+            margin-bottom: 15px;
 
           label {
             display: block;
@@ -230,6 +234,7 @@
 
           input {
             display: block;
+            width: 100%;
           }
         }
       }
@@ -264,13 +269,11 @@
         background-position: left center;
         background-repeat: no-repeat;
         background-size: contain;
-
-        cursor: pointer;
-
         border-radius: 3px;
 
         height: 2rem;
 
+        cursor: pointer;
         padding-left: 2rem;
         float: right;
 
@@ -347,7 +350,7 @@ article.user-pending-delete {
   transform: scale(0.4);
   transition: all 2000ms;
   transition-timing-function: cubic-bezier(0.085, 0.240, 0.225, 0.970);
-  
+
   &.user-card-section-list{
     transform: rotateY(90deg);
     transition: all 2000ms;
@@ -355,6 +358,51 @@ article.user-pending-delete {
   }
 }
 
+.span-heads {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 2.5rem;
+  left: 10px;
+
+  &.span-heads-h {
+    left: -0.15rem;
+  }
+
+  &.span-heads-x {
+    left: 1rem;
+  }
+
+  .span-head {
+    display: inline-block;
+    height: 2.5rem;
+    width: 2.5rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    &.span-head-h {
+      background-image: url('/assets/svg/face/h.svg');
+
+      @for $i from 2 through 10 {
+        &:nth-child(#{$i}) {
+          transform: scale(1 - $i/20);
+        }
+      }
+    }
+
+    &.span-head-x {
+      background-image: url('/assets/svg/face/x.svg');
+
+      @for $i from 1 through 9 {
+        &:nth-child(#{$i}) {
+          transform: scale((1 - 9/15) + $i/20);
+        }
+      }
+    }
+  }
+}
 @media (max-width:$sm) {
   .toolbar {
     display: flex;
@@ -367,6 +415,9 @@ article.user-pending-delete {
       font-size: 1rem;
       font-weight: bold;
     }
+.population-xfactor {
+  width: 12rem !important;
+}
   }
 
   .toolbar-controls {
