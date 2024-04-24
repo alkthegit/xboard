@@ -4,7 +4,7 @@ import { populateDb } from '../helpers/populizer';
 import { User } from 'src/app/models/User';
 import { Observable, of, throwError } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { UserListRequest } from '../models/UserListRequest';
+import { UserListRequest } from '../models/UserLIstRequest';
 import { mapUserRecordToUser } from '../helpers/mappers';
 import { normalizePageable } from '../helpers/pager-helper';
 import { UserEnvService } from 'src/app/services/user-env.service';

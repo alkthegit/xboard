@@ -14,7 +14,7 @@
         (click)="onPageAction('prev')">
         <div class="button-pages-container"></div>
       </li>
-      <li class="button-pages button-pages-cur">{{value?.page!=null ? value?.page+1: '?'}} / {{lastPage>0?lastPage+1:'?'}}
+      <li class="button-pages button-pages-cur">{{value?.page!=null ? value?.page+1: '?'}} / {{lastPage>=0?lastPage+1:'?'}}
       </li>
       <li tabindex="1"
         class="button-pages button-pages-next"
@@ -31,6 +31,7 @@
     </ul>
     <select class="controls-page-size"
       [disabled]="disabled"
+      [value]="value?.pageSize"
       (change)="onPageSizeChange($event)">
       <option *ngFor="let i of pageSizes"
         [value]="i">{{i}}&nbsp;&nbsp;&nbsp;</option>

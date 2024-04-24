@@ -3,12 +3,12 @@ import { Observable, ReplaySubject, Subject, from, interval, throwError } from '
 import { catchError, filter, finalize, map, mergeAll, mergeMap, startWith, switchMap, takeUntil, tap, throttleTime, toArray } from 'rxjs/operators';
 import { User } from 'src/app/models/User';
 import { normalizeLimits } from 'src/app/server/helpers/array-helper';
-import { UserListRequest } from 'src/app/server/models/UserListRequest';
 import { ServerService } from 'src/app/server/services/server.service';
 import { UserApiService } from 'src/app/services/user-api.service';
 import { UserEnvService } from 'src/app/services/user-env.service';
 import { PaginatorValue } from '../widgets/paginator/models/Paginator';
 import { PopulationStatistics } from 'src/app/server/models/PagedResponse';
+import { UserListRequest } from 'src/app/server/models/UserListRequest';
 
 @Component({
   selector: 'app-users-list',
