@@ -188,7 +188,7 @@
             <div class="scores-race scores-race-x">
               <span class="scores-race-head scores-race-head-x"></span>
               <span class="scores-value scores-value-x">{{stats.x}}</span>
-            </div>  
+            </div>
           </div>
         </ng-container>
       </div>
@@ -204,7 +204,15 @@
     </span>
   </section>
 
-  <section class="paginator">
+  <section class="navigator">
+    <div class="search-string">
+      <input id="searchString"
+        type="text"
+        class="search-field"
+        placeholder="Введите поисковую строку"
+        [value]="usersListRequest?.search || ''"
+        #searchStringRef>
+    </div>
     <app-paginator [value]="paginator"
       [disabled]="pendingUsers || pendingRepopulate || pendingUserDelete || pendingUsersDelete"
       (paginate)="onPaginate($event)">

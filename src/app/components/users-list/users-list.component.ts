@@ -1,22 +1,23 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject, Subject, from, interval, throwError } from 'rxjs';
-import { catchError, filter, finalize, map, mergeAll, mergeMap, startWith, switchMap, takeUntil, tap, throttleTime, toArray } from 'rxjs/operators';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Observable, ReplaySubject, Subject, from, fromEvent, interval, throwError } from 'rxjs';
+import { catchError, debounceTime, filter, finalize, map, mergeAll, mergeMap, startWith, switchMap, takeUntil, tap, toArray } from 'rxjs/operators';
 import { User } from 'src/app/models/User';
 import { normalizeLimits } from 'src/app/server/helpers/array-helper';
+import { PopulationStatistics } from 'src/app/server/models/PagedResponse';
+import { UserListRequest } from 'src/app/server/models/UserListRequest';
 import { ServerService } from 'src/app/server/services/server.service';
 import { UserApiService } from 'src/app/services/user-api.service';
 import { UserEnvService } from 'src/app/services/user-env.service';
 import { PaginatorValue } from '../widgets/paginator/models/Paginator';
-import { PopulationStatistics } from 'src/app/server/models/PagedResponse';
-import { UserListRequest } from 'src/app/server/models/UserListRequest';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
-export class UsersListComponent implements OnInit, OnDestroy {
+export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() autoUpdate = true;
+  @ViewChild('searchStringRef') searchString: ElementRef<HTMLInputElement>;
 
   /**
    * Текущая статистика
@@ -133,9 +134,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
     pageabe: {
       page: 0,
       pageSize: 5,
-    }
+    },
   }
-  private usersListRequest: UserListRequest = {
+  public usersListRequest: UserListRequest = {
     pageabe: { ...this.defaultUsersListRequest.pageabe },
     search: undefined,
   };
@@ -171,6 +172,22 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.statsSubject.next();
     this.statsSubject.complete();
+  }
+
+  ngAfterViewInit(): void {
+    fromEvent(this.searchString.nativeElement, 'input')
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(800),
+        tap(event => console.log(event)),
+        map(event => (event?.target as HTMLInputElement)?.value),
+        filter(value => value != null && value !== ''),
+        map(value => {
+          this.usersListRequest.search = value;
+          return this.usersListRequest;
+        })
+      )
+      .subscribe(this.usersSearchSubject);
   }
 
   public onChangListMode(mode: 'card' | 'list'): void {
