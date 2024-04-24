@@ -170,13 +170,28 @@
         </form>
       </div>
 
-      <label for="autoupdate"
-        class="label-autoupdate">
-        <input id="autoupdate"
-          type="checkbox"
-          [checked]="autoUpdate"
-          (change)="onAutoUpdateChanges(autoupdateRef.checked)" #autoupdateRef>&nbsp;Автообновление
-      </label>
+      <div class="lower-panel">
+        <label for="autoupdate"
+          class="label-autoupdate">
+          <input id="autoupdate"
+            type="checkbox"
+            [checked]="autoUpdate"
+            (change)="onAutoUpdateChanges(autoupdateRef.checked)" #autoupdateRef>&nbsp;Автообновление
+        </label>
+
+        <ng-container *ngIf="stats$ | async as stats">
+          <div class="lower-panel-scores">
+            <div class="scores-race scores-race-h">
+              <span class="scores-race-head scores-race-head-h"></span>
+              <span class="scores-value scores-value-h">{{stats.humans}}</span>
+            </div><span class="scores-divider">&nbsp;/&nbsp;</span>
+            <div class="scores-race scores-race-x">
+              <span class="scores-race-head scores-race-head-x"></span>
+              <span class="scores-value scores-value-x">{{stats.x}}</span>
+            </div>  
+          </div>
+        </ng-container>
+      </div>
     </div>
 
     <span class="list-message-panel">

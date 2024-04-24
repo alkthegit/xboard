@@ -3,11 +3,12 @@ import { Observable, ReplaySubject, Subject, from, interval, throwError } from '
 import { catchError, filter, finalize, map, mergeAll, mergeMap, startWith, switchMap, takeUntil, tap, throttleTime, toArray } from 'rxjs/operators';
 import { User } from 'src/app/models/User';
 import { normalizeLimits } from 'src/app/server/helpers/array-helper';
-import { UserListRequest } from 'src/app/server/models/UserLIstRequest';
+import { UserListRequest } from 'src/app/server/models/UserListRequest';
 import { ServerService } from 'src/app/server/services/server.service';
 import { UserApiService } from 'src/app/services/user-api.service';
 import { UserEnvService } from 'src/app/services/user-env.service';
 import { PaginatorValue } from '../widgets/paginator/models/Paginator';
+import { PopulationStatistics } from 'src/app/server/models/PagedResponse';
 
 @Component({
   selector: 'app-users-list',
@@ -16,6 +17,12 @@ import { PaginatorValue } from '../widgets/paginator/models/Paginator';
 })
 export class UsersListComponent implements OnInit, OnDestroy {
   @Input() autoUpdate = true;
+
+  /**
+   * Текущая статистика
+   */
+  private statsSubject = new ReplaySubject<PopulationStatistics>(1);
+  public stats$ = this.statsSubject.asObservable();
 
   private usersSubject = new ReplaySubject<User[]>(1);
   public users$ = this.usersSubject.asObservable();
@@ -122,13 +129,18 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   private destroy$ = new Subject<void>();
-  private usersListRequest: UserListRequest = {
+  private defaultUsersListRequest: UserListRequest = {
     pageabe: {
       page: 0,
       pageSize: 5,
     }
+  }
+  private usersListRequest: UserListRequest = {
+    pageabe: { ...this.defaultUsersListRequest.pageabe },
+    search: undefined,
   };
   private users: User[] = [];
+
 
   constructor(
     private usersApiService: UserApiService,
@@ -150,6 +162,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    this.usersSubject.next();
+    this.usersSubject.complete();
+
+    this.usersSearchSubject.next();
+    this.usersSearchSubject.complete();
+
+    this.statsSubject.next();
+    this.statsSubject.complete();
   }
 
   public onChangListMode(mode: 'card' | 'list'): void {
@@ -223,7 +244,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         // свежий запрос после пересоздания
-        this.usersListRequest = undefined;
+        this.usersListRequest = this.defaultUsersListRequest;
         this.usersSearchSubject.next(this.usersListRequest);
       });
   }
@@ -246,6 +267,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.userEnvService.populationVolumeMin = min;
     this.userEnvService.populationVolumeMax = max;
+
+    this.saveValueToLocalStorage('populationVolumeMin', this.userEnvService.populationVolumeMin);
+    this.saveValueToLocalStorage('populationVolumeMax', this.userEnvService.populationVolumeMax);
   }
 
   public onHumanPowerBaseChange(powerValue: string): void {
@@ -304,6 +328,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
                     page: resp.pageable.page,
                     pageSize: resp.pageable.pageSize,
                   };
+
+                  if (resp?.stats != null) {
+                    this.statsSubject.next(resp?.stats);
+                  }
                 }),
                 map(resp => {
                   return resp.content;

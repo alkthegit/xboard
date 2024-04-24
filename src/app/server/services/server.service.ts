@@ -4,7 +4,7 @@ import { populateDb } from '../helpers/populizer';
 import { User } from 'src/app/models/User';
 import { Observable, of, throwError } from 'rxjs';
 import { concatMap, delay, tap } from 'rxjs/operators';
-import { UserListRequest } from '../models/UserLIstRequest';
+import { UserListRequest } from '../models/UserListRequest';
 import { mapUserRecordToUser } from '../helpers/mappers';
 import { normalizePageable } from '../helpers/pager-helper';
 import { UserEnvService } from 'src/app/services/user-env.service';
@@ -77,7 +77,16 @@ export class ServerService {
        * Если задана пагинация - выбираем окно данных
        */
       if (userListRequest?.pageabe != null) {
-        const startIndex = pageable?.page * pageable?.pageSize;
+        let startIndex = pageable.page * pageable.pageSize;
+        if (startIndex > filteredCount) {
+          // 0-based номер индекс последней страницы при указанном размере страницы
+          const lastPage = Math.ceil(filteredCount / pageable.pageSize) - 1;
+
+          // обновляем данные, чтобы отдать нужные координаты
+          pageable.page = lastPage;
+          startIndex = pageable.pageSize * (lastPage)
+        }
+
         const endIndex = startIndex + pageable?.pageSize;
 
         records = records.slice(startIndex, endIndex)
@@ -100,6 +109,11 @@ export class ServerService {
         totalCount: filteredCount,
         page: pageable.page,
         pageSize: pageable.pageSize
+      },
+      stats: {
+        total: this.data.length,
+        humans: this.data.filter(e => e.gender !== 2)?.length,
+        x: this.data.filter(e => e.gender === 2)?.length
       }
     };
 

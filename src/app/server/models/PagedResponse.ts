@@ -6,6 +6,22 @@ export interface PagedResponse<T> {
   pageable: {
     totalCount: number;
     pageSize: number;
-    page: number
-  }
+    page: number,
+  },
+  stats?: PopulationStatistics;
+}
+
+/**
+ * Текущая статистика популяции
+ */
+export interface PopulationStatistics {
+  total: number,
+  /**
+   * Люди
+   */
+  humans: number,
+  /**
+   * Они
+   */
+  x: number
 }

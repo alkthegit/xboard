@@ -14,7 +14,8 @@
         (click)="onPageAction('prev')">
         <div class="button-pages-container"></div>
       </li>
-      <li class="button-pages button-pages-cur">{{value?.page!=null ? value?.page+1: '?'}}</li>
+      <li class="button-pages button-pages-cur">{{value?.page!=null ? value?.page+1: '?'}} / {{lastPage>0?lastPage+1:'?'}}
+      </li>
       <li tabindex="1"
         class="button-pages button-pages-next"
         [class.button-pages-disabled]="value?.page===lastPage"

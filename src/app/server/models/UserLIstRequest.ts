@@ -5,5 +5,5 @@ import { PageData } from './Pageable';
  */
 export interface UserListRequest {
   pageabe?: PageData;
-    search?: string;
+  search?: string;
 }

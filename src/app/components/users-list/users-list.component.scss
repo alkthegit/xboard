@@ -302,6 +302,76 @@
       }
     }
   }
+
+  .lower-panel{
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+
+    .lower-panel-scores{     
+      opacity: 0.7;
+      width: 10rem;
+      display: flex;
+      justify-content: center;
+
+      user-select: none;
+      
+      .scores-divider{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 1.5rem;
+        font-weight: bold;
+
+        margin: 0px 0px 0px 10px ;
+      }
+
+      .scores-race {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+
+        padding-right: 10px;
+        &.scores-race-x {
+          padding-right: 15px;
+        }
+
+        .scores-value{
+          position: absolute;
+          top: 0px;
+          right: 0px;
+
+          font-weight: bold;
+
+          &.scores-value-h {
+            color: #230096;
+          }
+          &.scores-value-x {
+            color: #169500;
+          }
+        }
+
+        .scores-race-head{
+          width: 2rem;
+          height: 2rem;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+  
+          &.scores-race-head-h {
+            background-image: url('/assets/svg/face/h.svg');
+          }
+          &.scores-race-head-x {
+            width: 1.8rem;
+            height: 1.8rem;
+            background-image: url('/assets/svg/face/x.svg');
+          }
+        }
+      }
+    }
+  }
 }
 
 .label-autoupdate {

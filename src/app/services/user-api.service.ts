@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ServerService } from '../server/services/server.service';
-import { UserListRequest } from '../server/models/UserLIstRequest';
+import { UserListRequest } from '../server/models/UserListRequest';
 import { Observable } from 'rxjs';
 import { User } from '../models/User';
 import { PagedResponse } from '../server/models/PagedResponse';

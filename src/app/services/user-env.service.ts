@@ -94,6 +94,16 @@ export class UserEnvService {
 
       storageValue = Number.parseInt(localStorage.getItem('xFactor'));
       this.xFactor = !Number.isNaN(storageValue) ? storageValue : 3;
+
+      storageValue = Number.parseInt(localStorage.getItem('populationVolumeMin'));
+      if (!Number.isNaN(storageValue)) {
+        this.populationVolumeMin = storageValue;
+      }
+
+      storageValue = Number.parseInt(localStorage.getItem('populationVolumeMax'));
+      if (!Number.isNaN(storageValue)) {
+        this.populationVolumeMax = storageValue;
+      }
     }
   }
 }

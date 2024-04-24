@@ -144,9 +144,9 @@ function startGlobalBeat(population: UserRecord[], settings?: PopulationSetting)
   }
 
   // интервал до следующей атаки
-  const globalAlienationBeat = () => nextBeat(1500, 5000);
+  const globalAlienationBeat = () => nextBeat(2000, 3000);
   // продолжительность атаки на очередного человека
-  const humanAlienationBeat = () => nextBeat(2000, 5000);
+  const humanAlienationBeat = () => nextBeat(1500, 2500);
 
   // через некоторое неизвестное заранее время начинается очередная попытка захвата
   const alienate = beat => {
