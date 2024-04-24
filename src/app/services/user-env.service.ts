@@ -36,9 +36,14 @@ export class UserEnvService {
   /**
    * Сколько шагов в ползунке управления сетью
    */
-  public factorSteps: number = 10;
-  public factorMin = 0.005;
-  public factorMax = 0.02;
+  public netFactorSteps: number = 10;
+  public netFactorMin = 0.005;
+  public netFactorMax = 0.02;
+
+  /**
+   * Базовая сопротивляемость человека попытке захвата
+   */
+  public humanPowerBase = 3;
 
   /**
    * Величина, понижающая сетевую скорость - "ползунок" в UI с целыми значениями.
@@ -46,7 +51,7 @@ export class UserEnvService {
    *
    * От данного значения далее расчитывается сетевой коэффициент
    */
-  private _networkFactor = Math.trunc(this.factorSteps / 2); // изначально понижение скорости примерно пополам
+  private _networkFactor = Math.trunc(this.netFactorSteps / 2); // изначально понижение скорости примерно пополам
   public get networkFactor(): number {
     return this._networkFactor;
   }
@@ -63,17 +68,32 @@ export class UserEnvService {
 
   private speedValues: number[] = [];
   constructor() {
-    this.setFactorRanges();
+    this.setNetworkFactorRanges();
+    this.loadSettingFromStorage();
   }
 
-  private setFactorRanges(): void {
+  private setNetworkFactorRanges(): void {
     // коэффициент для очередного шага "ползунка"
     let ratio: number = 1;
-    for (let i = 0; i < this.factorSteps; i++) {
-      ratio = this.factorMin + i * ((this.factorMax - this.factorMin) / (this.factorSteps - 1));
+    for (let i = 0; i < this.netFactorSteps; i++) {
+      ratio = this.netFactorMin + i * ((this.netFactorMax - this.netFactorMin) / (this.netFactorSteps - 1));
       this.speedValues.push(ratio * this.networkSpeed);
     }
 
     this.speedValues.reverse();
+  }
+
+  /**
+ * Загружает настройки просмотра из хранилища
+ */
+  private loadSettingFromStorage(): void {
+    let storageValue: any;
+    if (localStorage) {
+      storageValue = Number.parseInt(localStorage.getItem('humanPowerBase'));
+      this.humanPowerBase = !Number.isNaN(storageValue) ? storageValue : 3;
+
+      storageValue = Number.parseInt(localStorage.getItem('xFactor'));
+      this.xFactor = !Number.isNaN(storageValue) ? storageValue : 3;
+    }
   }
 }

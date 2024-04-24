@@ -14,6 +14,14 @@
 
       <div class="user-info">
         <p class="user-name">{{user | userShortName}}</p>
+        <p *ngIf="user.rate>0"
+          class="user-rate">
+          <span class="user-rate-medal"></span>
+          <span *ngIf="user.rate>1"
+            class="user-rate-medal"></span>
+          <span *ngIf="user.rate>2"
+            class="user-rate-medal"></span>
+        </p>
         <div class="user-location">
           <span class="user-location-location">
             <span>{{user.location?.name}},</span>
@@ -27,6 +35,7 @@
 
       <div class="user-overlay"
         title="{{user | userFio}}"
+        [disabled]="disabled"
         (click)="onUserClick($event)">
         <button class="button-delete-user"
           [class.disabled]="user.selected"
@@ -50,7 +59,17 @@
       </div>
 
       <div class="user-info">
-        <p class="user-name">{{user | userShortName}}</p>
+        <div class="user-name-rate">
+          <p class="user-name">{{user | userShortName}}</p>
+          <p *ngIf="user.rate>0"
+            class="user-rate">
+            <span class="user-rate-medal"></span>
+            <span *ngIf="user.rate>1"
+              class="user-rate-medal"></span>
+            <span *ngIf="user.rate>2"
+              class="user-rate-medal"></span>
+          </p>
+          </div>
         <div class="user-location">
           <span class="user-location-location">
             <span>{{user.location?.name}},</span>
@@ -64,6 +83,7 @@
 
       <div class="user-overlay"
         title="{{user | userFio}}"
+        [disabled]="disabled"
         (click)="onUserClick($event)">
         <button class="button-delete-user button-delete-user-display-list"
           [title]="'Удалить пользователя &quot;' + (user | userFio) +'&quot;'"
@@ -73,7 +93,8 @@
       </div>
     </div>
   </ng-template>
-
-
-
+  <div *ngIf="user.contact"
+    class="user-contact-overlay"
+    title="{{user | userFio}} вступил в контакт">
+  </div>
 </div>

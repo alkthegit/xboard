@@ -237,6 +237,24 @@
             width: 100%;
           }
         }
+
+        .population-human-power-controls {
+          position: relative;
+          width: 20rem;
+          padding-bottom: 1.5rem;
+          margin-bottom: 15px;
+          margin-top: 10px;
+
+          label {
+            display: block;
+            font-weight: normal;
+          }
+
+          input {
+            display: block;
+            width: 100%;
+          }
+        }
       }
 
       fieldset.fieldset-population-volumes {
@@ -275,6 +293,7 @@
 
         cursor: pointer;
         padding-left: 2rem;
+        margin-top: 15px;
         float: right;
 
         &[disabled] {
@@ -368,6 +387,11 @@ article.user-pending-delete {
   height: 2.5rem;
   left: 10px;
 
+  &.span-heads-power{
+    width: calc(100% + 1.2rem);
+    left: -0.5rem;
+  }
+
   &.span-heads-h {
     left: -0.15rem;
   }
@@ -389,7 +413,7 @@ article.user-pending-delete {
 
       @for $i from 2 through 10 {
         &:nth-child(#{$i}) {
-          transform: scale(1 - $i/20);
+          transform: scale(1 - $i/16);
         }
       }
     }
@@ -399,8 +423,33 @@ article.user-pending-delete {
 
       @for $i from 1 through 9 {
         &:nth-child(#{$i}) {
-          transform: scale((1 - 9/15) + $i/20);
+          transform: scale((1 - 9/16) + $i/16);
         }
+      }
+    }
+
+    &.span-head-p {
+      height: 2rem;
+      width: 2rem;
+    
+      position: initial;
+      &:nth-child(1){
+        background-image: url('/assets/svg/power/baby.svg');
+      }
+      &:nth-child(2){
+        background-image: url('/assets/svg/power/angry.svg');
+      }
+      &:nth-child(3){
+        background-image: url('/assets/svg/power/agent.svg');
+      }
+      &:nth-child(4){
+        background-image: url('/assets/svg/power/ninja.svg');
+      }
+      &:nth-child(5){
+        background-image: url('/assets/svg/power/austro.svg');
+      }
+      &:last-child{
+        background-image: url('/assets/svg/face/x.svg');
       }
     }
   }
@@ -420,6 +469,9 @@ article.user-pending-delete {
     }
 
     .population-xfactor {
+      width: 12rem !important;
+    }
+    .population-human-power-controls {
       width: 12rem !important;
     }
   }

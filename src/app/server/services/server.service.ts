@@ -153,10 +153,11 @@ export class ServerService {
    * Создание данных
    */
   private generateData(): void {
-    this.data = populateDb(
-      this.userEnvSercvice.populationVolumeMin,
-      this.userEnvSercvice.populationVolumeMax,
-      this.userEnvSercvice.xFactor
-    );
+    this.data = populateDb({
+      populationVolumeMin: this.userEnvSercvice.populationVolumeMin,
+      populationVolumeMax: this.userEnvSercvice.populationVolumeMax,
+      xFactor: this.userEnvSercvice.xFactor,
+      humanPowerBase: this.userEnvSercvice.humanPowerBase,
+    });
   }
 }

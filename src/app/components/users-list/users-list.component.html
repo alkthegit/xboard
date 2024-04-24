@@ -142,12 +142,31 @@
                   [value]="popuationMaxRangeRef.value"
                   disabled>
               </div>
-            </fieldset>
+              <div class="population-human-power-controls">
+                <label for="popuationMinRange">Устойчивость</label>
+                <input type="range"
+                  id="humanPowerBase"
+                  min="3"
+                  max="8"
+                  step="1"
+                  [value]="humanPowerBase"
+                  (change)="onHumanPowerBaseChange(humanPowerBaseRef.value)"
+                  #humanPowerBaseRef>
+                <span class="span-heads span-heads-power">
+                  <span class="span-head span-head-p"></span>
+                  <span class="span-head span-head-p"></span>
+                  <span class="span-head span-head-p"></span>
+                  <span class="span-head span-head-p"></span>
+                  <span class="span-head span-head-p"></span>
+                  <span class="span-head span-head-p"></span>
+                </span>
+              </div>
+              </fieldset>
+              <button class="population-gen"
+                type="submit"
+                [disabled]="pendingRepopulate || pendingUsers || pendingUserDelete"
+                (click)="onRepopulate()">Начать заново!</button>
           </fieldset>
-          <button class="population-gen"
-            type="submit"
-            [disabled]="pendingRepopulate || pendingUsers || pendingUserDelete"
-            (click)="onRepopulate()">Начать заново!</button>
         </form>
       </div>
 
@@ -155,7 +174,7 @@
         class="label-autoupdate">
         <input id="autoupdate"
           type="checkbox"
-          [value]="autoUpdate"
+          [checked]="autoUpdate"
           (change)="onAutoUpdateChanges(autoupdateRef.checked)" #autoupdateRef>&nbsp;Автообновление
       </label>
     </div>
@@ -179,8 +198,8 @@
         *ngFor="let user of users">
         <app-user [user]="user"
           [displayMode]="listMode"
-          [disabled]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected)"
-          (click)="onUserClick(user)"
+          [disabled]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected) || user.contact"
+          (userClick)="onUserClick(user)"
           (deleteMe)="onDeleteUser(user)"></app-user>
       </article>
     </ng-container>
@@ -206,8 +225,8 @@
         *ngFor="let user of users">
         <app-user [user]="user"
           [displayMode]="listMode"
-          [disabled]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected)"
-          (click)="onUserClick(user)"
+          [disabled]="pendingUserDeleteIdSet.has(user.id) || (pendingUsersDelete && user.selected) || user.contact"
+          (userClick)="onUserClick(user)"
           (deleteMe)="onDeleteUser(user)"></app-user>
       </article>
     </ng-container>

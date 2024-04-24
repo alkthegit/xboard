@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject, Subject, from, interval, throwError } from 'rxjs';
 import { catchError, filter, finalize, map, mergeAll, mergeMap, startWith, switchMap, takeUntil, tap, throttleTime, toArray } from 'rxjs/operators';
 import { User } from 'src/app/models/User';
@@ -90,11 +90,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
   public settings: {
     autoUpdate: boolean;
     populizerExpanded: boolean,
-    listMode: 'card' | 'list'
+    listMode: 'card' | 'list',
   } = {
       autoUpdate: true,
       populizerExpanded: false,
-      listMode: 'card'
+      listMode: 'card',
     }
 
   private destroy$ = new Subject<void>();
@@ -117,19 +117,25 @@ export class UsersListComponent implements OnInit, OnDestroy {
     return this.userEnvService.populationVolumeMax;
   }
 
+  public get humanPowerBase(): number {
+    return this.userEnvService.humanPowerBase;
+  }
+
   constructor(
     private usersApiService: UserApiService,
     private userEnvService: UserEnvService,
     private server: ServerService,
-  ) {
-    this.loadSettingFromStorage();
-
-    this.listMode = this.settings.listMode;
-    this.autoUpdate = this.settings.autoUpdate;
-  }
+    private cd: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.subscribeToUsersListUpdateSignals();
+
+    this.loadSettingFromStorage();
+    this.listMode = this.settings.listMode;
+    this.autoUpdate = this.settings.autoUpdate;
+
+    this.cd.detectChanges();
   }
 
   ngOnDestroy(): void {
@@ -190,6 +196,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     }
 
     this.userEnvService.xFactor = value;
+    this.saveValueToLocalStorage('xFactor', this.userEnvService.xFactor);
   }
 
   /**
@@ -230,6 +237,17 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.userEnvService.populationVolumeMin = min;
     this.userEnvService.populationVolumeMax = max;
+  }
+
+  public onHumanPowerBaseChange(powerValue: string): void {
+    let value = Number.parseInt(powerValue, 10);
+
+    if (Number.isNaN(value)) {
+      value = 3;
+    }
+
+    this.userEnvService.humanPowerBase = value;
+    this.saveValueToLocalStorage('humanPowerBase', this.userEnvService.humanPowerBase);
   }
 
   /**
@@ -388,7 +406,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * Загружает настройки просмотра из хранилища
    */
   private loadSettingFromStorage(): void {
-    let storageValue: string;
+    let storageValue: any;
     if (localStorage) {
       storageValue = localStorage.getItem('autoUpdate');
       this.settings.autoUpdate = storageValue === 'true';

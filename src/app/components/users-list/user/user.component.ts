@@ -12,7 +12,7 @@ export class UserComponent implements OnInit {
   @Input() displayMode: 'card' | 'line' = 'card';
   @Input() disabled = false;
 
-  @Output() click = new EventEmitter<Event>();
+  @Output() userClick = new EventEmitter<Event>();
   @Output() deleteMe = new EventEmitter<Event>();
 
   constructor() { }
@@ -21,8 +21,12 @@ export class UserComponent implements OnInit {
   }
 
   public onUserClick(event: Event): void {
+    if (this.disabled) {
+      return;
+    }
+
     event.stopPropagation();
-    this.click.emit(event);
+    this.userClick.emit(event);
   }
 
   public onDeleteUser(user: User, event: Event): void {
