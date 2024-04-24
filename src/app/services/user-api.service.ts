@@ -3,6 +3,7 @@ import { ServerService } from '../server/services/server.service';
 import { UserListRequest } from '../server/models/UserLIstRequest';
 import { Observable } from 'rxjs';
 import { User } from '../models/User';
+import { PagedResponse } from '../server/models/PagedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UserApiService {
    * Получает список пользователей по указанному запросу поиска
    * @param userListRequest
    */
-  public getList(userListRequest?: UserListRequest | null): Observable<User[]> {
+  public getList(userListRequest?: UserListRequest | null): Observable<PagedResponse<User>> {
     return this.server.getList(userListRequest);
   }
 

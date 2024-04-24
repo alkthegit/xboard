@@ -318,6 +318,17 @@
   }
 }
 
+section.paginator{
+  box-sizing: content-box;
+
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  box-sizing: content-box;
+  border: 1px solid #244157;
+  background-color: rgba(91, 138, 173, 0.05);
+  border-radius: 5px;
+}
+
 .users-list {
   margin-bottom: 10px;
   box-sizing: content-box;
@@ -356,12 +367,14 @@
   align-items: stretch;
   flex-wrap: nowrap;
 
+  padding: 10px 0px;
+
   article.user-card-section {
     box-sizing: border-box;
     padding: 10px;
 
     &.user-card-section-list {
-      padding: 5px;
+      padding: 2px 5px;
     }
   }
 }

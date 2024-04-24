@@ -1,7 +1,7 @@
 /**
- * данные для запросов спагинацией
+ * данные для запросов с пагинацией
  */
-export interface Pageable {
-    pageSize: number;
-    page: number;
+export interface PageData {
+  pageSize: number;
+  page: number;
 }

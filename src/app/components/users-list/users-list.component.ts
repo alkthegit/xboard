@@ -7,6 +7,7 @@ import { UserListRequest } from 'src/app/server/models/UserLIstRequest';
 import { ServerService } from 'src/app/server/services/server.service';
 import { UserApiService } from 'src/app/services/user-api.service';
 import { UserEnvService } from 'src/app/services/user-env.service';
+import { PaginatorValue } from '../widgets/paginator/models/Paginator';
 
 @Component({
   selector: 'app-users-list',
@@ -40,7 +41,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
   private autoUpdate$ = interval(300)
     .pipe(
       startWith(0),
-      map(() => void 0),
+      // автообновление - это повторная отправка текущего запроса
+      map(() => this.usersListRequest),
       /**
        * Для автоматического обновления надо чтобы:
        *   - оно было включено
@@ -60,7 +62,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   /**
    * Сигнал для обновления списка - операции со списком - обновление, пагинация, поиск
    */
-  private usersSearchSubject = new Subject<UserListRequest>();
+  private usersSearchSubject = new ReplaySubject<UserListRequest>(1);
 
   /**
    * Признак первого обновления, чтоб не сообщать раньше времени, что список пустой
@@ -97,9 +99,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
       listMode: 'card',
     }
 
-  private destroy$ = new Subject<void>();
-  private usersListRequest: UserListRequest = undefined;
-  private users: User[] = [];
+  public paginator: PaginatorValue;
 
   public get xFactorRange(): number[] {
     return this.userEnvService.xFactorRange;
@@ -120,6 +120,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
   public get humanPowerBase(): number {
     return this.userEnvService.humanPowerBase;
   }
+
+  private destroy$ = new Subject<void>();
+  private usersListRequest: UserListRequest = {
+    pageabe: {
+      page: 0,
+      pageSize: 5,
+    }
+  };
+  private users: User[] = [];
 
   constructor(
     private usersApiService: UserApiService,
@@ -263,6 +272,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Пагинация
+   */
+  public onPaginate(value: PaginatorValue) {
+    this.usersListRequest.pageabe.page = value.page ?? 0;
+    this.usersListRequest.pageabe.pageSize = value.pageSize ?? 5;
+    this.usersSearchSubject.next(this.usersListRequest);
+  }
+
+  /**
    * Подписывается на все сигналы для обновления списка пользователей
    */
   private subscribeToUsersListUpdateSignals(): void {
@@ -277,7 +295,21 @@ export class UsersListComponent implements OnInit, OnDestroy {
         tap(() => this.pendingUsers = true),
         tap(() => this.pendingUsers = true),
         switchMap(userListRequest => {
-          return this.usersApiService.getList(userListRequest ? userListRequest : null);
+          return (
+            this.usersApiService.getList(userListRequest ? userListRequest : null)
+              .pipe(
+                tap(resp => {
+                  this.paginator = {
+                    totalCount: resp.pageable.totalCount,
+                    page: resp.pageable.page,
+                    pageSize: resp.pageable.pageSize,
+                  };
+                }),
+                map(resp => {
+                  return resp.content;
+                }),
+              )
+          );
         }),
         tap(() => this.pendingUsers = false),
         tap(() => this.firstUpdate = false),

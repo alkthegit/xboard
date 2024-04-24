@@ -9,6 +9,7 @@ import { mapUserRecordToUser } from '../helpers/mappers';
 import { normalizePageable } from '../helpers/pager-helper';
 import { UserEnvService } from 'src/app/services/user-env.service';
 import { userDataSize } from '../config/constants';
+import { PagedResponse } from '../models/PagedResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,15 @@ export class ServerService {
    * Отдает список пользователей с учетом строки поиска и настройки пагинации
    * @param userListRequest
    */
-  public getList(userListRequest?: UserListRequest): Observable<User[]> {
+  public getList(userListRequest?: UserListRequest): Observable<PagedResponse<User>> {
+  // исходные записи с последующей фильтрацией - при поиске
     let records: ServerService['data'] = [...this.data];
+
+    // общее количество отфильтрованных записей до создания окна просмотра в пагинаторе
+    let filteredCount = records.length;
+
+    // пагинация в запросе клиента
+    const pageable = normalizePageable(userListRequest?.pageabe);
 
     if (userListRequest != null) {
       const search = userListRequest?.search;
@@ -59,19 +67,20 @@ export class ServerService {
                     .some(token => fio.indexOf(token) !== -1)
                 );
               });
-          }
 
-          /**
-           * Если задана пагинация - выбираем окно данных
-           */
-          if (userListRequest?.pageabe != null) {
-            const pageable = normalizePageable(userListRequest?.pageabe);
-            const startIndex = Number.isFinite(pageable?.pageSize) ? pageable?.page * pageable?.pageSize : 0;
-            const endIndex = Number.isFinite(pageable?.pageSize) ? startIndex + pageable?.pageSize : pageable?.pageSize;
-
-            records = records.slice(startIndex, endIndex)
+            filteredCount = records.length;
           }
         }
+      }
+
+      /**
+       * Если задана пагинация - выбираем окно данных
+       */
+      if (userListRequest?.pageabe != null) {
+        const startIndex = pageable?.page * pageable?.pageSize;
+        const endIndex = startIndex + pageable?.pageSize;
+
+        records = records.slice(startIndex, endIndex)
       }
     }
 
@@ -85,8 +94,17 @@ export class ServerService {
     const speed = this.userEnvSercvice.networkSpeedThrottled;
     const delayMs = (dataSize / speed) * 1000;
 
+    const pagedResponse: PagedResponse<User> = {
+      content: users,
+      pageable: {
+        totalCount: filteredCount,
+        page: pageable.page,
+        pageSize: pageable.pageSize
+      }
+    };
+
     // отдаем на фронт в приобразованном виде
-    return (of(users)
+    return (of(pagedResponse)
       .pipe(delay(delayMs))
     );
   }

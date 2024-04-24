@@ -1,28 +1,29 @@
-import { Pageable } from '../models/Pageable';
+import { PageData } from '../models/Pageable';
 
+const defaultPageSize = 100;
 /**
  * Приводит переданное значение Pageable к единообразию, учитывая пограничные случаи
- * @param p 
+ * @param p
  */
-export function normalizePageable(p: Pageable): Pageable {
-    if (p == null) {
-        return {
-            page: 0,
-            pageSize: Number.POSITIVE_INFINITY
-        };
-    }
+export function normalizePageable(p: PageData): PageData {
+  if (p == null) {
+    return {
+      page: 0,
+      pageSize: defaultPageSize,
+    };
+  }
 
-    let { page, pageSize } = p;
+  let { page, pageSize } = p;
 
-    if ((page ?? 0) < 0) {
-        page = 0;
-    }
-    if ((pageSize ?? 0) <= 0) {
-        pageSize = Number.POSITIVE_INFINITY;
-    }
+  if ((page ?? 0) < 0) {
+    page = 0;
+  }
+  if ((pageSize ?? 0) <= 0) {
+    pageSize = defaultPageSize;
+  }
 
-    return ({
-        page,
-        pageSize
-    });
+  return ({
+    page,
+    pageSize
+  });
 }

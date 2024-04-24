@@ -1,0 +1,41 @@
+<div class="app-paginator-component">
+  <nav class="controls"
+    [class.disabled]="disabled">
+    <ul class="controls-pages">
+      <li tabindex="1"
+        class="button-pages button-pages-first"
+        [class.button-pages-disabled]="value?.page===0"
+        (click)="onPageAction('first')">
+        <div class="button-pages-container"></div>
+      </li>
+      <li tabindex="1"
+        class="button-pages button-pages-prev"
+        [class.button-pages-disabled]="value?.page===0"
+        (click)="onPageAction('prev')">
+        <div class="button-pages-container"></div>
+      </li>
+      <li class="button-pages button-pages-cur">{{value?.page!=null ? value?.page+1: '?'}}</li>
+      <li tabindex="1"
+        class="button-pages button-pages-next"
+        [class.button-pages-disabled]="value?.page===lastPage"
+        (click)="onPageAction('next')">
+        <div class="button-pages-container"></div>
+      </li>
+      <li tabindex="1"
+        class="button-pages button-pages-last"
+        [class.button-pages-disabled]="value?.page===lastPage"
+        (click)="onPageAction('last')">
+        <div class="button-pages-container"></div>
+      </li>
+    </ul>
+    <select class="controls-page-size"
+      [disabled]="disabled"
+      (change)="onPageSizeChange($event)">
+      <option *ngFor="let i of pageSizes"
+        [value]="i">{{i}}&nbsp;&nbsp;&nbsp;</option>
+    </select>
+  </nav>
+
+  <div *ngIf="disabled"
+    class="overlay-disabled"></div>
+</div>

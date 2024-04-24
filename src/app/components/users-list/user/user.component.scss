@@ -73,8 +73,8 @@
       }
 
       &.button-delete-user-display-list {
-        right: 2px;
-        top: 2px;
+        right: 5px;
+        top: 5px;
         width: 1.2rem;
         height: 1.2rem;
         font-size: 1.2rem
@@ -217,26 +217,30 @@
     width: 100%;
     max-width: initial;
 
-    height: 85px;
+    height: 60px;
 
     padding: 5px 10px;
     background-color: #fcfcff;
-    box-shadow: 0px 0px 3px 1px rgb(62, 54, 54);
+    box-shadow: 0px 0px 2px 1px rgb(62, 54, 54);
     border-radius: 3px;
 
     .user-status {
       position: absolute;
-      left: 2.5rem;
-      width: 7px;
-      height: 7px;
+      left: 1.5rem;
+      top: 2px;
+      width: 5px;
+      height: 5px;
       border-width: 1px;
     }
 
     .user-image {
       background-position: left center;
+      width: 2.2rem;
     }
 
     .user-info {
+      margin-top: 2px;
+
       .user-name-rate{
         .user-rate, .user-name{
           display: inline-block;
@@ -263,8 +267,8 @@
 
       .user-location {
         .user-location-flag {
-          right: 0px;
-          bottom: 0px;
+          right: -5px;
+          bottom: -5px;
         }
 
         .user-location-location {

@@ -9,7 +9,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class RangePointOpacityPipe implements PipeTransform {
 
   /**
-   *
+   * Вычисляет значение css opacity в заисимости от состояние range input
    * @param pointValue целевая точка - некоторое значение из диапазон, например в `input[type="range"]`
    * @param rangeValue текущее значение, выбранное в некотором диапазоне
    * @param e окрестность вокруг `pointValue`, вход в эту окрестность начинает уменьшать `opacity` при приближении к `pointValue`

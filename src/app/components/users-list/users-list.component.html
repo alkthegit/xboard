@@ -189,6 +189,14 @@
     </span>
   </section>
 
+  <section class="paginator">
+    <app-paginator [value]="paginator"
+      [disabled]="pendingUsers || pendingRepopulate || pendingUserDelete || pendingUsersDelete"
+      (paginate)="onPaginate($event)">
+    </app-paginator>
+
+  </section>
+
   <section *ngIf="listMode==='card'"
     class="users-list"
     [class.list-mode-card]="listMode==='card'">

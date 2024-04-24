@@ -1,9 +1,9 @@
-import { Pageable } from './Pageable';
+import { PageData } from './Pageable';
 
 /**
  * Типизирует тело запроса на получение списка пользователей
  */
 export interface UserListRequest {
-    pageabe?: Pageable;
+  pageabe?: PageData;
     search?: string;
 }
