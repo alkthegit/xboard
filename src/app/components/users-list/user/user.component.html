@@ -1,9 +1,14 @@
 <div class="app-user-component"
-  [class.user-selected]="user.selected">
+  [class.user-selected]="user.selected"
+  [class.user-contact]="user.contact"
+  [class.user-alienated]="user.alienated">
   <ng-container *ngIf="displayMode=='card' else displayLineRef">
     <div class="user-card display-card">
-      <div class="user-image"
+      <div class="user-image">
+        <div class="user-image-x"></div>
+        <div class="user-image-h"
         [style.background-image]="'url('+user.imageUrl+')'">
+        </div>
         <div class="user-status"
           [ngClass]="{
           'user-status-online': user.status === UserStatus.Online,

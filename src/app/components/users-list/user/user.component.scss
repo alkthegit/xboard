@@ -140,9 +140,30 @@
     border: 2px solid lightgrey;
     border-radius: 2px;
 
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center top;
+    .user-image-h, .user-image-x{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center top;
+
+      animation: 2s infinite;
+    }
+
+    &:is(.user-contact .user-image){
+      .user-image-h {
+        animation-name: contact-h;
+      }
+      .user-image-x {
+        background-image: url('/assets/svg/face/x.svg');
+        opacity: 0;
+        animation-name: contact-x;
+      }
+    }
   }
 
   .user-info {
@@ -293,4 +314,28 @@
   .user-image {
     background-position: left top !important;
   }
+}
+
+@keyframes contact-h {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }  
+}
+
+@keyframes contact-x {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }  
 }
