@@ -13,7 +13,7 @@ export type PaginatorButtonAction = 'first' |
 })
 export class PaginatorComponent implements OnInit {
   @Input() disabled = false;
-  @Input() pageSizes: number[] = [5, 10, 15];
+  @Input() pageSizes: number[] = [5, 10, 15, 50, 100];
 
   @Input() public set value(paginatorValue: PaginatorValue) {
     this._value = {
