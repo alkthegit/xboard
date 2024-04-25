@@ -53,28 +53,30 @@
 
   <ng-template #displayLineRef>
     <div class="user-card display-list">
-      <div class="user-image"
+      <div class="user-image">
+        <div class="user-image-x"></div>
+        <div class="user-image-h"
         [style.background-image]="'url('+user.imageUrl+')'">
+        </div>
         <div class="user-status"
           [ngClass]="{
-                    'user-status-online': user.status === UserStatus.Online,
-                    'user-status-offline':user.status   === UserStatus.Offline,
-                    'user-status-recent': user.status  === UserStatus.Recent
-                  }"></div>
+          'user-status-online': user.status === UserStatus.Online,
+          'user-status-offline':user.status   === UserStatus.Offline,
+          'user-status-recent': user.status  === UserStatus.Recent
+        }"></div>
       </div>
-
+      <p *ngIf="user.rate>=0"
+        class="user-rate">
+        <span class="user-rate-medal"></span>
+        <span *ngIf="user.rate>1"
+          class="user-rate-medal"></span>
+        <span *ngIf="user.rate>2"
+          class="user-rate-medal"></span>
+      </p>
       <div class="user-info">
         <div class="user-name-rate">
           <p class="user-name">{{user | userShortName}}</p>
-          <p *ngIf="user.rate>0"
-            class="user-rate">
-            <span class="user-rate-medal"></span>
-            <span *ngIf="user.rate>1"
-              class="user-rate-medal"></span>
-            <span *ngIf="user.rate>2"
-              class="user-rate-medal"></span>
-          </p>
-          </div>
+        </div>
         <div class="user-location">
           <span class="user-location-location">
             <span>{{user.location?.name}},</span>

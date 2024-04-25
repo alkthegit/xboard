@@ -140,7 +140,8 @@
     border: 2px solid lightgrey;
     border-radius: 2px;
 
-    .user-image-h, .user-image-x{
+    .user-image-h,
+    .user-image-x {
       position: absolute;
       left: 0;
       top: 0;
@@ -154,10 +155,11 @@
       animation: 2s infinite;
     }
 
-    &:is(.user-contact .user-image){
+    &:is(.user-contact .user-image) {
       .user-image-h {
         animation-name: contact-h;
       }
+
       .user-image-x {
         background-image: url('/assets/svg/face/x.svg');
         opacity: 0;
@@ -180,12 +182,12 @@
       font-weight: 600;
     }
 
-    .user-rate{
+    .user-rate {
       margin-left: auto;
       margin-right: 0;
       margin-top: 5px;
 
-      .user-rate-medal{
+      .user-rate-medal {
         display: inline-block;
         width: 1.5rem;
         height: 1.5rem;
@@ -226,7 +228,7 @@
         font-size: 0.8rem;
         font-style: italic;
 
-        span:nth-child(2){
+        span:nth-child(2) {
           overflow: hidden;
           text-overflow: ellipsis;
         }
@@ -247,7 +249,7 @@
 
     .user-status {
       position: absolute;
-      left: 1.5rem;
+      left: 1.6rem;
       top: 2px;
       width: 5px;
       height: 5px;
@@ -255,53 +257,66 @@
     }
 
     .user-image {
-      background-position: left center;
       width: 2.2rem;
+
+      .user-image-h,
+      .user-image-x {
+        background-position: left center;
+      }
+    }
+
+    .user-rate {
+      position: absolute;
+      top: 10px;
+
+      left: 3.5rem;
+      margin: 0;
+      
+      .user-rate-medal {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+
+        background-image: url('/assets/svg/medal.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
     }
 
     .user-info {
       margin-top: 2px;
 
-      .user-name-rate{
-        .user-rate, .user-name{
+      .user-name-rate {
+        .user-name {
           display: inline-block;
         }
-
-        .user-rate{
-          position: relative;
-          top: 2px;
-          margin: 0;
-          margin-left: 2rem;
-    
-          .user-rate-medal{
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-    
-            background-image: url('/assets/svg/medal.svg');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: contain;
-          }
-        }
-      }
+      }     
 
       .user-location {
+        position: initial;
+
+        flex-grow: 0;
+
         .user-location-flag {
-          right: -5px;
-          bottom: -5px;
+          right: 0px;
+          bottom: -2px;
         }
 
         .user-location-location {
-          max-width: initial;
+          position: absolute;
+          left: initial;
           right: 2.5rem;
-          bottom: 0;
+          bottom: 5px;
+          display: flex;
+          max-width: 15rem;
+          flex-direction: column;
+          font-size: 0.8rem;
+          font-style: italic;
           text-align: right;
-          font-style: normal;
         }
       }
     }
-
   }
 }
 
@@ -320,22 +335,26 @@
   0% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
-  }  
+  }
 }
 
 @keyframes contact-x {
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 0.5;
   }
+
   100% {
     opacity: 0;
-  }  
+  }
 }
