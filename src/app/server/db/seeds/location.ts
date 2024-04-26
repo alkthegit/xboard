@@ -12,6 +12,10 @@ export interface LocationSeed {
    */
   name: string;
   cities: string[];
+  /**
+   * 🌌 Экстратерриториальное месторасположения
+   */
+  exTerra?: boolean;
 }
 
 /**
@@ -428,7 +432,41 @@ export const LocationsData: LocationSeed[] = [
     code: 'milkyway',
     name: 'Млечный путь',
     cities: [
-      'Ригель'
+      'Ригель',
+      'Меркурий',
+      'Марс',
     ]
+  },
+  {
+    code: 'world1',
+    name: 'Росс 128',
+    cities: [
+      'Ригель'
+    ],
+    exTerra: true,
+  },
+  {
+    code: 'world2',
+    name: 'Тигарден',
+    cities: [
+      'Тигарден b'
+    ],
+    exTerra: true,
+  },
+  {
+    code: 'world3',
+    name: 'Лейтен',
+    cities: [
+      'Лейтен b'
+    ],
+    exTerra: true,
+  },
+  {
+    code: 'world4',
+    name: 'Глизе 180',
+    cities: [
+      ' Глизе 180 b '
+    ],
+    exTerra: true,
   },
 ];

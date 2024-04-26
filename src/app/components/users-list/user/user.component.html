@@ -1,7 +1,8 @@
 <div class="app-user-component"
   [class.user-selected]="user.selected"
   [class.user-contact]="user.contact"
-  [class.user-alienated]="user.alienated">
+  [class.user-alienated]="user.alienated"
+  [class.user-x]="user.gender==='x'">
   <ng-container *ngIf="displayMode=='card' else displayLineRef">
     <div class="user-card display-card">
       <div class="user-image">

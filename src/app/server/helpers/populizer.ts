@@ -64,8 +64,9 @@ function produceEntity(settings?: PopulationSetting): UserRecord {
       'female' : gender === 2 ?
         'x' : 'male';
   const region = x ?
-    LocationsData.find(e => e.code === 'milkyway') :
-    getRandomItem(LocationsData.filter(l => l.code !== 'milkyway'));
+    getRandomItem(LocationsData.filter(l => l.exTerra)) :
+    getRandomItem(LocationsData.filter(l => !l.exTerra));
+
   const location = getRandomItem(region?.cities ?? []);
 
   let user: UserRecord = {

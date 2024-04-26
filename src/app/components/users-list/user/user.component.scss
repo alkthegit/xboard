@@ -152,7 +152,7 @@
       background-size: contain;
       background-position: center top;
 
-      animation: 2s infinite;
+      animation: 1.5s infinite;
     }
 
     &:is(.user-contact .user-image) {
@@ -211,10 +211,15 @@
 
         right: -5px;
         bottom: -10px;
-
+        
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
+        
+        &:is(.user-x .user-location-flag){
+          right: -10px;
+          bottom: -8px;
+        }
       }
 
       .user-location-location {
@@ -301,6 +306,12 @@
         .user-location-flag {
           right: 0px;
           bottom: -2px;
+
+          &:is(.user-x .user-location-flag){
+            width: 20px;
+            right: 5px;
+            bottom: 0px;
+          }
         }
 
         .user-location-location {
