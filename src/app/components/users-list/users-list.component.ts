@@ -181,7 +181,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
         debounceTime(800),
         tap(event => console.log(event)),
         map(event => (event?.target as HTMLInputElement)?.value),
-        filter(value => value != null && value !== ''),
+        map(value => value ?? ''),
         map(value => {
           this.usersListRequest.search = value;
           return this.usersListRequest;
